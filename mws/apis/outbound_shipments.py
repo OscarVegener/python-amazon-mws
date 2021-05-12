@@ -82,41 +82,27 @@ class OutboundShipments(MWS):
     def get_fulfillment_preview(
         self,
         marketplace_id=None,
-        seller_fulfillment_order_id=None,
-        fulfillment_action=None,
-        displayable_order_id=None,
-        displayable_order_datetime=None,
-        displayable_order_comment=None,
-        shipping_speed_category=None,
-        destination_address=None,
-        fulfillment_policy=None,
-        notification_email_list=None,
-        cod_settings=None,
+        address=None,
         items=None,
-        delivery_window=None,
+        # shipping_speed_categories=None,
+        # include_cod_fulfillment_preview=None,
+        # include_delivery_windows=None,
     ):
         data = {
             "Action": "GetFulfillmentPreview",
             "MarketplaceId": marketplace_id,
-            "SellerFulfillmentOrderId": seller_fulfillment_order_id,
-            "FulfillmentAction": fulfillment_action,
-            "DisplayableOrderId": displayable_order_id,
-            "DisplayableOrderDateTime": displayable_order_datetime,
-            "DisplayableOrderComment": displayable_order_comment,
-            "ShippingSpeedCategory": shipping_speed_category,
-            "FulfillmentPolicy": fulfillment_policy,
+            # "FulfillmentAction": fulfillment_action,
+            # "DisplayableOrderId": displayable_order_id,
+            # "DisplayableOrderDateTime": displayable_order_datetime,
+            # "DisplayableOrderComment": displayable_order_comment,
+            # "ShippingSpeedCategory": shipping_speed_category,
+            # "FulfillmentPolicy": fulfillment_policy,
         }
         data.update(utils.enumerate_keyed_param("Items.member", items or []))
         data.update(
-            utils.dict_keyed_param("DestinationAddress", destination_address or {})
+            utils.dict_keyed_param("Address", address or {})
         )
-        data.update(utils.dict_keyed_param("CODSettings", cod_settings or {}))
-        data.update(utils.dict_keyed_param("DeliveryWindow", delivery_window or {}))
-        data.update(
-            utils.enumerate_param(
-                "NotificationEmailList.member", notification_email_list or []
-            )
-        )
+
         return self.make_request(data)
 
 
