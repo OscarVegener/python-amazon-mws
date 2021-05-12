@@ -77,6 +77,45 @@ class OutboundShipments(MWS):
             )
         )
         return self.make_request("CreateFulfillmentOrder", data)
+    
+
+    def get_fulfillment_preview(
+        self,
+        marketplace_id=None,
+        seller_fulfillment_order_id=None,
+        fulfillment_action=None,
+        displayable_order_id=None,
+        displayable_order_datetime=None,
+        displayable_order_comment=None,
+        shipping_speed_category=None,
+        destination_address=None,
+        fulfillment_policy=None,
+        notification_email_list=None,
+        cod_settings=None,
+        items=None,
+        delivery_window=None,
+    ):
+        data = {
+            "MarketplaceId": marketplace_id,
+            "SellerFulfillmentOrderId": seller_fulfillment_order_id,
+            "FulfillmentAction": fulfillment_action,
+            "DisplayableOrderId": displayable_order_id,
+            "DisplayableOrderDateTime": displayable_order_datetime,
+            "DisplayableOrderComment": displayable_order_comment,
+            "ShippingSpeedCategory": shipping_speed_category,
+            "FulfillmentPolicy": fulfillment_policy,
+        }
+        data.update(enumerate_keyed_param("Items.member", items or []))
+        data.update(dict_keyed_param("DestinationAddress", destination_address or {}))
+        data.update(dict_keyed_param("CODSettings", cod_settings or {}))
+        data.update(dict_keyed_param("DeliveryWindow", delivery_window or {}))
+        data.update(
+            enumerate_param(
+                "NotificationEmailList.member", notification_email_list or []
+            )
+        )
+        return self.make_request("GetFulfillmentPreview", data)
+
 
     def update_fulfillment_order(self):
         """Updates and/or requests shipment for a fulfillment order with an order hold on it.
